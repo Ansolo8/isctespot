@@ -29,6 +29,25 @@ First you can git clone this project to your desired location:
    ```sh
    git clone https://github.com/narfasec/isctespot.git
    ```
+
+### Quick Start with Health Check Script
+
+The easiest way to get started is using our automated health check and setup script:
+
+```bash
+cd isctespot/
+python install.py
+```
+
+This script will:
+- ✅ Check system requirements (Python 3.9, Node.js 18+, npm, MariaDB)
+- ✅ Verify virtual environment and dependencies
+- ✅ Test MariaDB connection on localhost:3306
+- ✅ Offer to install missing packages
+- ✅ Provide database setup options (clean, create, populate)
+- ✅ Start all services in development mode
+- ✅ Run health checks on all services
+
 ### Docker (Quick start)
 
 [Install Docker](https://docs.docker.com/engine/install/), if not installed in your system.
@@ -47,42 +66,87 @@ First you can git clone this project to your desired location:
   docker exec project-server-1 python /app/tests/health_checks/test_flow_1.py
   ```
 
-## Local Setup (Optional)
+## Local Setup (Manual Installation)
 
 _Below are the steps to setup the project on your local environment. This is also the developer setup, with this setup you can easily make changes and debug issues._
 
-### Requirements
-* python 3.9 https://www.python.org/downloads/
-* node 18 https://nodejs.org/dist/v18.16.0/node-v18.16.0-x64.msi (Windows) | `brew install node 18.16` (Mac OS)
-* mariadb community https://mariadb.com/downloads/
-### Installation
-* Change directory to iscte_spot and start by installing the frontend
-  ```
-  cd iscte_spot/frontend/admin-one-vue-tailwind-master
-  npm install
-  ```
-* Change directory to server and install the python requirements
-  ```
-  cd iscte_spot/server
-  python install -r requirements.txt
-  ```
-### Run application
-* open one terminal to execute the frontend
-  ```
-  cd iscte_spot/frontend/admin-one-vue-tailwind-master
-  npm run dev
-  ```
-* open another terminal to execute the server
-  ```
-  cd iscte_spot/server
-  python appserver.py
-  ```
-* execute setup script according to your system (**setup.ps1** for windows, **setup.sh** for Mac and Linux)
-* execute health checks to check if everything is in order
-  ```
-  cd iscte_spot/server
-  python .\tests\health_checks\test_flow_1.py
-  ```
+### Prerequisites
+* **Python 3.9+** - [Download from python.org](https://www.python.org/downloads/)
+* **Node.js 18+** - [Download from nodejs.org](https://nodejs.org/)
+* **MariaDB** - [Download from mariadb.com](https://mariadb.com/downloads/)
+* **npm** - Usually comes with Node.js
+
+### Installation Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/narfasec/isctespot.git
+   cd isctespot/
+   ```
+
+2. **Set up MariaDB**
+   - Install MariaDB on your system
+   - Start MariaDB service
+   - Create database: `CREATE DATABASE iscte_spot;`
+   - Set up user: `CREATE USER 'root'@'localhost' IDENTIFIED BY 'teste123';`
+   - Grant privileges: `GRANT ALL PRIVILEGES ON iscte_spot.* TO 'root'@'localhost';`
+
+3. **Set up Python environment**
+   ```bash
+   cd server/
+   python -m venv venv
+   
+   # Windows
+   venv\Scripts\activate
+   # Linux/macOS
+   source venv/bin/activate
+   
+   pip install -r requirements.txt
+   ```
+
+4. **Set up Frontend**
+   ```bash
+   cd frontend/admin-one-vue-tailwind-master/
+   npm install
+   ```
+
+### Run Application
+
+1. **Start MariaDB** (if not already running)
+
+2. **Start Backend** (Terminal 1)
+   ```bash
+   cd server/
+   source venv/bin/activate  # or venv\Scripts\activate on Windows
+   python appserver.py
+   ```
+
+3. **Start Frontend** (Terminal 2)
+   ```bash
+   cd frontend/admin-one-vue-tailwind-master/
+   npm run dev
+   ```
+
+4. **Set up Database** (Terminal 3)
+   ```bash
+   cd server/db/setup/
+   python clean_db.py
+   python create_db.py
+   python data_population.py
+   ```
+
+5. **Run Health Checks**
+   ```bash
+   cd server/
+   python tests/health_checks/test_flow_1.py
+   ```
+
+### Service URLs
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/health
+- **Admin Portal**: http://localhost:5000/ap/login
+- **MariaDB**: localhost:3306
   
 ### Built With
 
