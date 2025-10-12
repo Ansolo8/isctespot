@@ -28,26 +28,7 @@ First you can git clone this project to your desired location:
    ```sh
    git clone https://github.com/narfasec/isctespot.git
    ```
-
-### Quick Start with Health Check Script
-
-The easiest way to get started is using our automated health check and setup script:
-
-```bash
-cd isctespot/
-python install.py
-```
-
-This script will:
-- ✅ Check system requirements (Python 3.9, Node.js 18+, npm, MariaDB)
-- ✅ Verify virtual environment and dependencies
-- ✅ Test MariaDB connection on localhost:3306
-- ✅ Offer to install missing packages
-- ✅ Provide database setup options (clean, create, populate)
-- ✅ Start all services in development mode
-- ✅ Run health checks on all services
-
-### Docker (Quick start)
+## Docker (Quick start)
 
 [Install Docker](https://docs.docker.com/engine/install/), if not installed in your system.
 * After installing docker, make sure docker deamon is running (opening the desktop app of Docker is enough)
@@ -85,10 +66,6 @@ _Below are the steps to setup the project on your local environment. This is als
 
 2. **Set up MariaDB**
    - Install MariaDB on your system
-   - Start MariaDB service
-   - Create database: `CREATE DATABASE iscte_spot;`
-   - Set up user: `CREATE USER 'root'@'localhost' IDENTIFIED BY 'teste123';`
-   - Grant privileges: `GRANT ALL PRIVILEGES ON iscte_spot.* TO 'root'@'localhost';`
 
 3. **Set up Python environment**
    ```bash
@@ -108,8 +85,25 @@ _Below are the steps to setup the project on your local environment. This is als
    cd frontend/admin-one-vue-tailwind-master/
    npm install
    ```
+### Quick Start for local setup
 
-### Run Application
+The easiest way to get started with automated health check and setup script:
+
+```bash
+cd isctespot/
+python isctespot_setup.py
+```
+
+This script will:
+- ✅ Check system requirements (Python 3.9, Node.js 18+, npm, MariaDB)
+- ✅ Verify virtual environment and dependencies
+- ✅ Test MariaDB connection on localhost:3306
+- ✅ Offer to install missing packages
+- ✅ Provide database setup options ("Run all setup scripts" to set up database for the first time)
+- ✅ Start all services in development mode
+- ✅ Run health checks on all services
+
+### Run Application sepratly (Recommended for debug)
 
 1. **Start MariaDB** (if not already running)
 
@@ -143,7 +137,6 @@ _Below are the steps to setup the project on your local environment. This is als
 ### Service URLs
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:5000
-- **Health Check**: http://localhost:5000/health
 - **Admin Portal**: http://localhost:5000/ap/login
 - **MariaDB**: localhost:3306
   
