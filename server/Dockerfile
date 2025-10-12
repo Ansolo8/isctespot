@@ -22,6 +22,10 @@ RUN pip install -r requirements.txt
 
 # Copy the current directory contents into the container
 COPY . .
+
+# Replace 'localhost' with 'mariadb' in db_connector.py for Docker environment
+RUN sed -i "s/host = 'localhost'/host = 'mariadb'/g" /app/db/db_connector.py
+
 # # RUN python /app/db/setup/test_connection.py
 # RUN python /app/db/setup/create_db.py
 # RUN python /app/db/setup/data_population.py

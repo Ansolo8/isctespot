@@ -21,4 +21,12 @@ def create_app(config_file='settings.py'):
     app.register_blueprint(clients)
     app.register_blueprint(admin)
 
+    @app.route('/health', methods=['GET'])
+    def health_check():
+        """Simple health check endpoint"""
+        return {
+            'status': 'healthy',
+            'message': 'ISCTE Spot API is running',
+        }, 200
+
     return app
