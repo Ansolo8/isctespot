@@ -17,7 +17,8 @@ services:
     environment:
       - FLASK_ENV=development
     depends_on:
-      - mariadb
+      mariadb: #Altered
+        condition: service_healthy #Altered
     networks:
       - app-network
 
@@ -33,6 +34,12 @@ services:
       - ./data:/var/lib/mysql
     networks:
       - app-network
+    healthcheck: #Altered
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "-u", "root", "-pteste123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 networks:
   app-network:
