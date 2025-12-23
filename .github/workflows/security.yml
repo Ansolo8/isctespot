@@ -1,0 +1,39 @@
+name: Security Pipeline - IscteSpot
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 🔍 SAST - Semgrep
+    - name: Run Semgrep
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: auto
+
+    # 📦 Dependency Scan - OWASP Dependency Check
+    - name: Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: "IscteSpot"
+        path: "."
+        format: "HTML"
+
+    # 🔑 Secrets Scan - Gitleaks
+    - name: Gitleaks scan
+      uses: gitleaks/gitleaks-action@v2
+
+    # 🐳 Vulnerabilities (Trivy)
+    - name: Trivy filesystem scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: fs
+        severity: HIGH,CRITICAL
