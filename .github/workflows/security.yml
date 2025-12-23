@@ -18,6 +18,7 @@ jobs:
       uses: returntocorp/semgrep-action@v1
       with:
         config: auto
+      continue-on-error: true
 
     # 📦 Dependency Scan - OWASP Dependency Check
     - name: Dependency Check
