@@ -45,6 +45,7 @@ class DBConnector:
                     'get_user_agent'            args:user_id        |       return: return is_agent (True or False)
                     'get_ticket_by_id'          args:ticket_id      |       return: ticket
                     'get_agent_tickets'         args:agent token    |       return: agent tokens
+		    'get_company_payments'      args: company_id
                 CREATE
                     'create_user_employee'      args: {username, email, company_id}
                     'create_user_admin'         args: {username, password, email}
@@ -52,6 +53,7 @@ class DBConnector:
                     'create_client'             args: {first_name, last_name, email, phone_number, address, city, country, company_id}
                     'create_sale'               args: {client_id, user_id, product, price, quantity}
                     'create_ticket'             args: {user_id, status, description, category, messages}
+		    'create_payment_record'     args: {company_id, amount, transaction_id, status}
                 UPDATE
                     'update_user_password'      args: {user_id, new_password}
                     'update_user_comp_id'       args: {user_id, comp_id}
@@ -450,6 +452,19 @@ class DBConnector:
                     return result
                 else:
                     return False
+	    elif query == 'get_company_payments':
+   		 cursor.execute(
+        		"""
+        		SELECT PaymentID, Amount, Status, CreatedAt
+        		FROM Payments
+        		WHERE CompanyID = ?
+        		ORDER BY CreatedAt DESC
+        		""",
+        		(args,)
+    		)
+    		result = cursor.fetchall()
+    		return result if isinstance(result, list) else False
+
                 
             elif query == 'create_user_employee':
                 cursor.execute(
@@ -523,6 +538,21 @@ class DBConnector:
                     return result[0]
                 else:
                     return result
+	    elif query == 'create_payment_record':
+    		cursor.execute(
+        		"""
+        		INSERT INTO Payments (CompanyID, Amount, TransactionID, Status, CreatedAt)
+        		VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+        		""",
+        		(
+            		args['company_id'],
+            		args['amount'],
+            		args['transaction_id'],
+            		args['status']
+        		)
+    		)
+    		connection.commit()
+    		return cursor.lastrowid
 
             elif query == 'update_user_password':
                 cursor.execute(
@@ -727,7 +757,7 @@ class DBConnector:
                     return False
 
             elif query == 'delete_client_by_id':
-                cursor.execute(f"DELETE FROM Clients WHERE ClientID = {args}")
+                cursor.execute("DELETE FROM Clients WHERE ClientID = ?", (args,))  #args não é interpretado como SQL
                 connection.commit()
                 result = cursor.rowcount
                 if isinstance(result, tuple):
