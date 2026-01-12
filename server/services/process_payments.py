@@ -1,5 +1,5 @@
-from server.services.fastpay_service import FastPayService
-from server.db.db_connector import DBConnector
+from services.fastpay_gateway import FastPayGateway
+from db.db_connector import DBConnector
 
 class PaymentProcessor:
 

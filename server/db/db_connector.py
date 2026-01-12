@@ -452,20 +452,24 @@ class DBConnector:
                     return result
                 else:
                     return False
-	    elif query == 'get_company_payments':
-   		 cursor.execute(
-        		"""
-        		SELECT PaymentID, Amount, Status, CreatedAt
-        		FROM Payments
-        		WHERE CompanyID = ?
-        		ORDER BY CreatedAt DESC
-        		""",
-        		(args,)
-    		)
-    		result = cursor.fetchall()
-    		return result if isinstance(result, list) else False
+	    
+            elif query == 'get_company_payments':
+                cursor.execute(
+                    """
+                    SELECT PaymentID, Amount, Status, CreatedAt
+                    FROM Payments
+                    WHERE CompanyID = ?
+                    ORDER BY CreatedAt DESC
+                    """,
+                    (args,)
+                )
+                result = cursor.fetchall()
+                if isinstance(result, list):
+                    return result 
+                else: 
+                    return False
+ 
 
-                
             elif query == 'create_user_employee':
                 cursor.execute(
                     "INSERT INTO Users (Username, PasswordHash, Email, CompanyID, CommissionPercentage, CreatedAt) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
@@ -538,22 +542,8 @@ class DBConnector:
                     return result[0]
                 else:
                     return result
-	    elif query == 'create_payment_record':
-    		cursor.execute(
-        		"""
-        		INSERT INTO Payments (CompanyID, Amount, TransactionID, Status, CreatedAt)
-        		VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-        		""",
-        		(
-            		args['company_id'],
-            		args['amount'],
-            		args['transaction_id'],
-            		args['status']
-        		)
-    		)
-    		connection.commit()
-    		return cursor.lastrowid
-
+	    
+           
             elif query == 'update_user_password':
                 cursor.execute(
                     "UPDATE Users SET PasswordHash = ? WHERE UserID = ?;",

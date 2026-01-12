@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from db.db_connector import DBConnector
 from api.auth.jwt_utils import issue_token, validate_token
-from api.utils.crypto_utils import encrypt_value
+from api.utils.crypto_helper import encrypt_value
 import bcrypt
 
 auth = Blueprint('auth', __name__)
